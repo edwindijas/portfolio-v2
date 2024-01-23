@@ -1,0 +1,42 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "jsdom",
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  "roots": [
+    "<rootDir>/src"
+  ],
+  "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx|tsx?)$",
+  "moduleFileExtensions": [
+    "ts",
+    "tsx",
+    "js",
+    "jsx",
+    "json",
+    "node"
+  ],
+  "maxWorkers": 50, 
+  "collectCoverageFrom": [
+    "src/**/*.{js,jsx,ts,tsx}",
+    "!<rootDir>/node_modules/",
+    "!src/**/__stories__/*.{js?,ts?}",
+    "!src/**/__tests__/*.{js?,ts?}",
+    "!src/**/__mocks__/*.{js?,ts?}",
+    "!src/utils/*.{js,jsx,ts,tsx}",
+    "!src/main.tsx"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "moduleNameMapper": {
+    "\\.svg": "<rootDir>/jest/__mocks__/svgrMock.js",
+    "^@/(.*)$": "<rootDir>/src/$1"
+  },
+  "setupFilesAfterEnv": ["./jest/setupTests.ts"]
+}
