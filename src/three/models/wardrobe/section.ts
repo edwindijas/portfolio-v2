@@ -9,6 +9,7 @@ class Section {
   private readonly width
   private readonly main
   private readonly divisions: Division[]
+  private sections: THREE.Mesh[] = []
 
   constructor (main: IMain, width: number, height: number, depth: number, thickness: number, horizontal: boolean, division: number) {
     this.main = main
@@ -35,10 +36,18 @@ class Section {
 
 
   drawDivisions (): void {
-    let left = -this.width / 2
+    let left = !this.horizontal ? (-this.width / 2) : (-this.height / 2)
+
     this.divisions.forEach(
-      (div: Division, index: number) => { left -= this.drawDivision(div, index, left)}
+      (div: Division, index: number) => { 
+        left = this.drawDivision(div, index, left)
+      }
     )
+  }
+
+  clear (): void {
+    this.main.removeFromScene(this.sections)
+    this.sections = []
   }
 
   drawDivision (divider: Division, index: number, startLeft: number): number {
@@ -47,25 +56,25 @@ class Section {
       return 0
     }
 
-  
     let left = startLeft
 
-    const sharedWidth = this.width - ((this.divisions.length - 1) * this.thickness)
+    const sharedWidth = (this.horizontal ? this.height :  this.width) - ((this.divisions.length - 1) * this.thickness)
     const sectionWidth = divider.ratio * sharedWidth
     
     left += sectionWidth
 
-    console.log(`left ${left} og ${startLeft}`)
-
-    // console.log( (this.divisions.length * this.thickness) * divider.ratio )
-
-    
-    // const space = this.width - (this.divisions.length * this.thickness) * divider.ratio
     const mesh = this.createBox()
 
-    mesh.position.x = left + (this.thickness / 2)
+    if (this.horizontal) {
+      mesh.position.y = left + (this.thickness / 2)
+    } else {
+      mesh.position.x = left + (this.thickness / 2)
+    }
+    
 
     this.main.addToScene([mesh])
+
+    this.sections.push(mesh)
 
     return left - this.thickness
   }

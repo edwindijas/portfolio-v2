@@ -8,7 +8,7 @@ class WardRobe {
   private height =  10
   private width = 20
   private depth = 7
-  private readonly thickness = 0.25
+  private readonly thickness = 0.15
   private readonly boxObjects: Three.Mesh[]
   private readonly propertyScale = {
     x: 1,
@@ -70,7 +70,7 @@ class WardRobe {
   }
 
   createSections (): void {
-    const sections = new Section(this.main, this.width, this.height, this.depth, this.thickness, false, 3)
+    const sections = new Section(this.main, this.width, this.height, this.depth, this.thickness, true, 3)
     sections.drawDivisions()
   }
 }
