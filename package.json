@@ -19,15 +19,18 @@
   "dependencies": {
     "@material-design-icons/svg": "^0.14.13",
     "@reduxjs/toolkit": "^2.0.1",
+    "@types/three": "^0.160.0",
     "class-variance-authority": "^0.7.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
+    "lil-gui": "^0.19.1",
     "lodash": "^4.17.21",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intl": "^6.5.5",
     "react-redux": "^9.0.4",
-    "react-router-dom": "^6.19.0"
+    "react-router-dom": "^6.19.0",
+    "three": "^0.160.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.2",
