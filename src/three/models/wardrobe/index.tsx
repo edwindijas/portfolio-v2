@@ -1,6 +1,6 @@
 import * as Three from 'three'
 import { type IMain } from '@/three/types/scene'
-
+import Section from './section'
 
 class WardRobe {
   private readonly main: Main
@@ -10,6 +10,11 @@ class WardRobe {
   private depth = 7
   private readonly thickness = 0.25
   private readonly boxObjects: Three.Mesh[]
+  private readonly propertyScale = {
+    x: 1,
+    y: 1,
+    z: 0
+  }
 
   constructor (main: Main) {
     this.main = main
@@ -19,7 +24,7 @@ class WardRobe {
 
     this.updatePosition()
     this.main.addToScene(this.boxObjects)
-    
+    this.createSections()
   }
 
   createBox (horizontal: boolean, isLast: boolean): Three.Mesh {
@@ -62,6 +67,11 @@ class WardRobe {
     this.boxObjects[3].position.x = -x + additive
     this.boxObjects[4].position.z = -this.depth / 2
 
+  }
+
+  createSections (): void {
+    const sections = new Section(this.main, this.width, this.height, this.depth, this.thickness, false, 3)
+    sections.drawDivisions()
   }
 }
 

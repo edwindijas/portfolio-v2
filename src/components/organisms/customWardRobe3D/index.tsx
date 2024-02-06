@@ -22,7 +22,7 @@ const CustomizeWardRobe = () : JSX.Element => {
     }
   }, [])
 
-  return <div className='w-full h-full bg-[#ccc]'>
+  return <div className='w-[calc(100-30em)] h-full bg-[#ccc] grow-0'>
     <canvas className='w-full h-full' ref={canvas} />
   </div>
 }

@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as Three from 'three'
 import { OrbitControls } from 'three/examples/jsm/Addons.js'
-import GUI from 'lil-gui'; 
 import { type IMain } from '../types/scene'
 import WardRobe from '../models/wardrobe'
 
-
 class Main implements IMain {
-  // private readonly canvas: HTMLCanvasElement | undefined
+  private readonly canvas: HTMLCanvasElement | undefined
   private readonly scene: Three.Scene
   private readonly camera: Three.PerspectiveCamera
   private readonly renderer: Three.WebGLRenderer
@@ -15,9 +13,9 @@ class Main implements IMain {
   private readonly controls: OrbitControls
 
   constructor (canvas: HTMLCanvasElement) {
+    this.canvas = canvas
     this.animate = this.animate.bind(this)
-
-    const gui = new GUI();
+    this.resize = this.resize.bind(this)
     
     this.renderer = new Three.WebGLRenderer({
       canvas,
@@ -36,23 +34,28 @@ class Main implements IMain {
 
     this.scene = new Three.Scene()
     this.camera = new Three.PerspectiveCamera(70, width / height, 0.1, 1000)
-    this.camera.position.z = 15
+    this.camera.position.z = 30
     this.camera.position.y = 2
     this.scene.add(this.camera)
 
     this.wardRobe = new WardRobe(this)
     this.controls = new OrbitControls(this.camera, canvas.parentElement as HTMLElement)
     this.controls.enabled = true
+    this.controls.maxPolarAngle = Math.PI / 2
 
-    this.addLights(-40, 0, 0)
-    this.addLights(40, 20, 40)
+    this.addLights(10, 10, 10)
+    this.addLights(-10, 10, 10)
+    this.addLights(0, -5, 10)
+
+    this.addPlane()
+
+    window.addEventListener('resize', this.resize)
     
     this.animate()
   }
 
   addToScene (meshes: Three.Mesh[]): void {
     meshes.forEach((mesh) => {
-      console.log(this.scene.position)
       this.scene.add(mesh)
     })
   }
@@ -72,8 +75,22 @@ class Main implements IMain {
     }
   }
 
+  resize (): void {
+    const parentElement = this.canvas as HTMLCanvasElement
+
+    if (parentElement === null) {
+      return
+    }
+
+    const {offsetWidth: width, offsetHeight: height} = parentElement
+
+    this.camera.aspect = width / height
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(width, height)
+  }
+
   addLights (x: number, y: number, z: number): void {
-    const light = new Three.DirectionalLight( 0xffffff, 1 );
+    const light = new Three.DirectionalLight( 0xffffff, 3 );
     light.position.set( x, y, z ); // default; light shining from top
     light.castShadow = true; // default false
 
@@ -82,12 +99,17 @@ class Main implements IMain {
     light.shadow.mapSize.height = 512; // default
     light.shadow.camera.near = 0.5; // default
     light.shadow.camera.far = 500; // default
-        this.scene.add( light );
+    this.scene.add( light );
 
-    const directionalLight = new Three.DirectionalLight( 0xffffff, 2 );
+  }
 
-    directionalLight.castShadow = true
-    this.scene.add( directionalLight );
+  addPlane (): void {
+    const plane = new Three.PlaneGeometry(5000, 5000)
+    const material = new Three.MeshStandardMaterial({color: 0xffffff})
+    const planeMesh = new Three.Mesh(plane, material)
+    this.scene.add(planeMesh)
+    planeMesh.position.y = -5;
+    planeMesh.rotation.x = - Math.PI / 2;
   }
 }
 
